@@ -215,6 +215,9 @@ struct blkid_struct_probe
 
 	struct blkid_struct_probe *parent;	/* for clones */
 	struct blkid_struct_probe *disk_probe;	/* whole-disk probing */
+
+	uint64_t		csum;
+	uint64_t		csum_expected;
 };
 
 /* private flags library flags */
@@ -516,7 +519,7 @@ extern int blkid_probe_set_magic(blkid_probe pr, blkid_loff_t offset,
 				size_t len, unsigned char *magic)
 			__attribute__((nonnull));
 
-extern int blkid_probe_verify_csum(blkid_probe pr, uint64_t csum, uint64_t expected)
+extern int blkid_probe_set_csum(blkid_probe pr, uint64_t csum, uint64_t expected)
 			__attribute__((nonnull));
 
 extern void blkid_unparse_uuid(const unsigned char *uuid, char *str, size_t len)

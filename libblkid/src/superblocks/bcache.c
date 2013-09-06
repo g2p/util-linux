@@ -108,8 +108,8 @@ static int probe_bcache (blkid_probe pr, const struct blkid_idmag *mag)
 
 	if (le64_to_cpu(bcs->offset) != BCACHE_SB_OFF / 512)
 		return 1;
-	if (!blkid_probe_verify_csum(pr, bcache_crc64(bcs), le64_to_cpu(bcs->csum)))
-		return 1;
+	if (blkid_probe_set_csum(pr, bcache_crc64(bcs), le64_to_cpu(bcs->csum)))
+		return -1;
 
 	if (blkid_probe_set_uuid(pr, bcs->uuid) < 0)
 		return -1;

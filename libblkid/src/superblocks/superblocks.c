@@ -391,6 +391,19 @@ static int superblocks_probe(blkid_probe pr, struct blkid_chain *chn)
 			}
 		}
 
+		if (pr->csum != pr->csum_expected) {
+			DBG(LOWPROBE, blkid_debug(
+					"incorrect checksum for type %s,"
+					" got %jX, expected %jX",
+					id->name, pr->csum, pr->csum_expected));
+			if (chn->flags & BLKID_SUBLKS_BADCSUM)
+				/* flag a bad checksum but continue probing */
+				blkid_probe_set_value(pr, "SBBADCSUM", (unsigned char *) "1", 2);
+			else
+				/* stop probing */
+				goto nothing;
+		}
+
 		/* all cheks passed */
 		if (chn->flags & BLKID_SUBLKS_TYPE)
 			rc = blkid_probe_set_value(pr, "TYPE",

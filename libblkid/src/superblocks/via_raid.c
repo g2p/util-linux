@@ -69,9 +69,9 @@ static int probe_viaraid(blkid_probe pr,
 		return 1;
 	if (v->version_number > 2)
 		return 1;
-	if (!blkid_probe_verify_csum(pr, via_checksum(v), v->checksum))
-		return 1;
 
+	if (blkid_probe_set_csum(pr, via_checksum(v), v->checksum))
+		return -1;
 	if (blkid_probe_sprintf_version(pr, "%u", v->version_number) != 0)
 		return -1;
 	if (blkid_probe_set_magic(pr, off,

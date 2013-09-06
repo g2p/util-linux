@@ -104,8 +104,9 @@ static int probe_silraid(blkid_probe pr,
 		return 1;
 	if (sil->disk_number >= 8)
 		return 1;
-	if (!blkid_probe_verify_csum(pr, silraid_checksum(sil), le16_to_cpu(sil->checksum1)))
-		return 1;
+
+	if (blkid_probe_set_csum(pr, silraid_checksum(sil), le16_to_cpu(sil->checksum1)))
+		return -1;
 
 	if (blkid_probe_sprintf_version(pr, "%u.%u",
 				le16_to_cpu(sil->major_ver),
